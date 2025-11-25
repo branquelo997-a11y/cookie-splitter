@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍪 Cookie Splitter 🍪</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilização da Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000000;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #0d47a1 0%, #01579b 100%);
+            border-radius: 10px;
+            border: 2px solid #000000;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+        }
+
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #0d47a1 #000000;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animação de fundo - Universo com estrelas e meteoros */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: #000000;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        .meteor {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(21, 101, 192, 0.8), transparent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(21, 101, 192, 0.8), 0 0 20px rgba(21, 101, 192, 0.5);
+            animation: meteorFall linear infinite;
+        }
+
+        @keyframes meteorFall {
+            0% {
+                transform: translateY(-100px) translateX(0) rotate(-45deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(500px) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #0a0a0a;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border: 1px solid #1a1a1a;
+        }
+
+        h1 {
+            color: #1565c0;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(21, 101, 192, 0.5), 0 0 40px rgba(21, 101, 192, 0.3);
+            animation: titlePulse 2s ease-in-out infinite, titleGlow 3s ease-in-out infinite;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes titleGlow {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(21, 101, 192, 0.5), 0 0 40px rgba(21, 101, 192, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 30px rgba(21, 101, 192, 0.8), 0 0 60px rgba(21, 101, 192, 0.5), 0 0 80px rgba(21, 101, 192, 0.3);
+            }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64b5f6;
+            margin-bottom: 30px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9em;
+            font-weight: 400;
+        }
+
+        .config-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #000000;
+            border-radius: 8px;
+            border: 1px solid #1a1a1a;
+        }
+
+        .config-section label {
+            color: #64b5f6;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .config-section input {
+            padding: 8px 12px;
+            border: 2px solid #1a1a1a;
+            border-radius: 5px;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 500;
+            width: 80px;
+            text-align: center;
+        }
+
+        /* Remover setinhas do input number */
+        .config-section input[type="number"]::-webkit-inner-spin-button,
+        .config-section input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            appearance: none;
+            margin: 0;
+        }
+
+        .config-section input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        .input-with-paste {
+            position: relative;
+        }
+
+        .input-with-paste textarea {
+            margin: 0;
+        }
+
+        .paste-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 6px 12px;
+            background: rgba(46, 125, 50, 0.2);
+            color: #64b5f6;
+            border: 1px solid rgba(46, 125, 50, 0.4);
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        .paste-btn:hover {
+            background: rgba(46, 125, 50, 0.3);
+            border-color: rgba(46, 125, 50, 0.6);
+            color: #1565c0;
+            transform: scale(1.05);
+        }
+
+        .paste-btn:active {
+            transform: scale(0.95);
+        }
+
+        .config-section input:focus {
+            outline: none;
+            border-color: #64b5f6;
+            box-shadow: 0 0 10px rgba(100, 181, 246, 0.2);
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #64b5f6;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 2px solid #1a1a1a;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 13px;
+            font-weight: 400;
+            resize: vertical;
+            transition: border-color 0.3s;
+            background: #000000;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #1565c0;
+            box-shadow: 0 0 10px rgba(21, 101, 192, 0.2);
+        }
+
+        textarea::placeholder {
+            color: #4a5568;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 12px 30px;
+            background: #0d47a1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        button:hover {
+            background: #1565c0;
+            box-shadow: 0 5px 15px rgba(13, 71, 161, 0.4);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .clear-btn {
+            background: #c62828;
+        }
+
+        .clear-btn:hover {
+            background: #d32f2f;
+            box-shadow: 0 5px 15px rgba(198, 40, 40, 0.4);
+        }
+
+        .stats {
+            margin-top: 15px;
+            padding: 10px;
+            background: #000000;
+            border-radius: 8px;
+            text-align: center;
+            color: #64b5f6;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid #1a1a1a;
+        }
+
+        .results {
+            margin-top: 30px;
+        }
+
+        .results h2 {
+            color: #1565c0;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .lote {
+            margin-bottom: 25px;
+            border: 2px solid #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+            background: #000000;
+        }
+
+        .lote:hover {
+            border-color: #0d47a1;
+        }
+
+        .lote-header {
+            background: linear-gradient(135deg, #0d47a1 0%, #01579b 100%);
+            color: white;
+            padding: 12px 20px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lote-header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .copy-lote-btn {
+            padding: 6px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-lote-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        .lote-content {
+            padding: 10px;
+            background: #000000;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 4px;
+        }
+
+        .cookie-item {
+            background: #0a0a0a;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border-left: 2px solid #0d47a1;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            color: #64b5f6;
+            word-break: break-word;
+            transition: all 0.2s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .cookie-item:hover {
+            background: #1a1a1a;
+            border-left-color: #1565c0;
+            white-space: normal;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #4a5568;
+        }
+
+        /* Sistema de Notificações */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            min-width: 300px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideInRight 0.3s ease, slideOutRight 0.3s ease 2.7s forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toast::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
+        }
+
+        .toast.info {
+            background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+        }
+
+        .toast-icon {
+            font-size: 20px;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        /* Animações de entrada para elementos */
+        .lote {
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        button {
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:active::after {
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg" id="animatedBg"></div>
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <div class="container">
+        <h1>🍪 Cookie Splitter 🍪</h1>
+        <p class="subtitle">Cole seus cookies e eles serão separados automaticamente</p>
+
+        <div class="input-section">
+            <label for="cookieInput">Cole seus cookies aqui (um por linha ou separados por quebra de linha):</label>
+            <div class="input-with-paste">
+                <textarea id="cookieInput" placeholder="Cole seus cookies aqui...&#10;Exemplo:&#10;Cookie1...&#10;Cookie2...&#10;Cookie3..."></textarea>
+                <button class="paste-btn" onclick="colarCookies()">📋 Colar</button>
+            </div>
+            
+            <div class="config-section">
+                <label for="tamanhoLote">Cookies por lote:</label>
+                <input type="number" id="tamanhoLote" value="25" min="1" max="1000">
+            </div>
+            
+            <div class="button-group">
+                <button onclick="processarCookies()">Separar em Lotes</button>
+                <button onclick="extrairNicksSenhas()" style="background: #2e7d32;">Extrair Nicks e Senhas</button>
+                <button class="clear-btn" onclick="limparTudo()">Limpar Tudo</button>
+            </div>
+
+            <div class="stats" id="stats" style="display: none;">
+                <span id="totalCookies">0</span> cookies encontrados | 
+                <span id="totalLotes">0</span> lotes criados
+            </div>
+        </div>
+
+        <div class="results" id="results" style="display: none;">
+            <h2>Lotes de Cookies</h2>
+            <div id="lotesContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sistema de Notificações
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icons = {
+                success: '✅',
+                error: '❌',
+                info: 'ℹ️'
+            };
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icons[type] || icons.info}</span>
+                <span>${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Criar partículas animadas no fundo
+        function createStarsAndMeteors() {
+            const bg = document.getElementById('animatedBg');
+            
+            // Criar estrelas
+            const starCount = 150;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 2 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                
+                bg.appendChild(star);
+            }
+            
+            // Criar meteoros
+            const meteorCount = 8;
+            for (let i = 0; i < meteorCount; i++) {
+                const meteor = document.createElement('div');
+                meteor.className = 'meteor';
+                
+                const startX = Math.random() * 100;
+                const startY = -100;
+                const length = Math.random() * 150 + 100;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 2 + 3;
+                
+                meteor.style.left = startX + '%';
+                meteor.style.top = startY + 'px';
+                meteor.style.height = length + 'px';
+                meteor.style.animationDelay = delay + 's';
+                meteor.style.animationDuration = duration + 's';
+                
+                bg.appendChild(meteor);
+            }
+        }
+
+        // Inicializar animações ao carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            createStarsAndMeteors();
+        });
+
+        async function colarCookies() {
+            try {
+                const text = await navigator.clipboard.readText();
+                const textarea = document.getElementById('cookieInput');
+                textarea.value = text;
+                showToast('Cookies colados com sucesso!', 'success');
+                // Focar no textarea após colar
+                textarea.focus();
+            } catch (err) {
+                console.error('Erro ao colar:', err);
+                showToast('Erro ao colar cookies. Tente usar Ctrl+V manualmente.', 'error');
+            }
+        }
+
+        function extrairNick(cookie) {
+            // Extrai o nick (parte antes de ":CAS#")
+            const match = cookie.match(/^([^:]+):/);
+            return match ? match[1] : cookie.substring(0, 30) + '...';
+        }
+
+        function processarCookies() {
+            const input = document.getElementById('cookieInput').value.trim();
+            
+            if (!input) {
+                showToast('Por favor, cole alguns cookies primeiro!', 'error');
+                return;
+            }
+
+            // Separar cookies - pode ser por linha ou por algum padrão
+            let cookies = input.split('\n')
+                .map(line => line.trim())
+                .filter(line => line.length > 0);
+
+            // Se não encontrou quebras de linha, tenta separar por padrão específico
+            if (cookies.length === 1 && cookies[0].length > 100) {
+                // Tenta encontrar padrões de cookies do Roblox
+                const cookiePattern = /([A-Za-z0-9_]+:CAS#[0-9]+:[^"]*"[^"]+")/g;
+                const matches = input.match(cookiePattern);
+                if (matches && matches.length > 0) {
+                    cookies = matches;
+                } else {
+                    cookies = input.split('"')
+                        .filter(c => c.trim().length > 50)
+                        .map(c => c.trim());
+                }
+            }
+
+            // Tentar separar por padrão mais específico do Roblox
+            if (cookies.length === 1 || (cookies.length < 10 && cookies[0].length > 500)) {
+                const robloxPattern = /([A-Za-z0-9_\-]+:CAS#[0-9]+:[^"]*"[^"]{100,}")/g;
+                const robloxMatches = input.match(robloxPattern);
+                if (robloxMatches && robloxMatches.length > 1) {
+                    cookies = robloxMatches;
+                } else {
+                    const lines = input.split(/\r?\n/);
+                    const newCookies = [];
+                    let currentCookie = '';
+                    
+                    for (let line of lines) {
+                        line = line.trim();
+                        if (!line) continue;
+                        
+                        if (/^[A-Za-z0-9_\-]+:CAS#/.test(line)) {
+                            if (currentCookie) {
+                                newCookies.push(currentCookie.trim());
+                            }
+                            currentCookie = line;
+                        } else if (currentCookie) {
+                            currentCookie += ' ' + line;
+                        } else {
+                            currentCookie = line;
+                        }
+                    }
+                    
+                    if (currentCookie) {
+                        newCookies.push(currentCookie.trim());
+                    }
+                    
+                    if (newCookies.length > cookies.length) {
+                        cookies = newCookies;
+                    }
+                }
+            }
+
+            if (cookies.length === 0) {
+                showToast('Nenhum cookie válido encontrado!', 'error');
+                return;
+            }
+
+            // Separar em lotes conforme configurado
+            const lotes = [];
+            const tamanhoLoteInput = document.getElementById('tamanhoLote');
+            const tamanhoLote = parseInt(tamanhoLoteInput.value) || 25;
+            
+            // Validar valor
+            if (tamanhoLote < 1) {
+                showToast('O tamanho do lote deve ser pelo menos 1!', 'error');
+                tamanhoLoteInput.value = 25;
+                return;
+            }
+            
+            if (tamanhoLote > 1000) {
+                showToast('O tamanho do lote não pode ser maior que 1000!', 'error');
+                tamanhoLoteInput.value = 1000;
+                return;
+            }
+
+            for (let i = 0; i < cookies.length; i += tamanhoLote) {
+                lotes.push(cookies.slice(i, i + tamanhoLote));
+            }
+
+            // Atualizar estatísticas
+            document.getElementById('totalCookies').textContent = cookies.length;
+            document.getElementById('totalLotes').textContent = lotes.length;
+            document.getElementById('stats').style.display = 'block';
+
+            // Exibir resultados
+            exibirLotes(lotes);
+            showToast(`${cookies.length} cookies separados em ${lotes.length} lotes!`, 'success');
+        }
+
+        function extrairNicksSenhas() {
+            const input = document.getElementById('cookieInput').value.trim();
+            
+            if (!input) {
+                showToast('Por favor, cole alguns cookies primeiro!', 'error');
+                return;
+            }
+
+            // Separar cookies usando a mesma lógica
+            let cookies = input.split('\n')
+                .map(line => line.trim())
+                .filter(line => line.length > 0);
+
+            if (cookies.length === 1 && cookies[0].length > 100) {
+                const cookiePattern = /([A-Za-z0-9_]+:CAS#[0-9]+:[^"]*"[^"]+")/g;
+                const matches = input.match(cookiePattern);
+                if (matches && matches.length > 0) {
+                    cookies = matches;
+                } else {
+                    cookies = input.split('"')
+                        .filter(c => c.trim().length > 50)
+                        .map(c => c.trim());
+                }
+            }
+
+            if (cookies.length === 1 || (cookies.length < 10 && cookies[0].length > 500)) {
+                const robloxPattern = /([A-Za-z0-9_\-]+:CAS#[0-9]+:[^"]*"[^"]{100,}")/g;
+                const robloxMatches = input.match(robloxPattern);
+                if (robloxMatches && robloxMatches.length > 1) {
+                    cookies = robloxMatches;
+                } else {
+                    const lines = input.split(/\r?\n/);
+                    const newCookies = [];
+                    let currentCookie = '';
+                    
+                    for (let line of lines) {
+                        line = line.trim();
+                        if (!line) continue;
+                        
+                        if (/^[A-Za-z0-9_\-]+:CAS#/.test(line)) {
+                            if (currentCookie) {
+                                newCookies.push(currentCookie.trim());
+                            }
+                            currentCookie = line;
+                        } else if (currentCookie) {
+                            currentCookie += ' ' + line;
+                        } else {
+                            currentCookie = line;
+                        }
+                    }
+                    
+                    if (currentCookie) {
+                        newCookies.push(currentCookie.trim());
+                    }
+                    
+                    if (newCookies.length > cookies.length) {
+                        cookies = newCookies;
+                    }
+                }
+            }
+
+            if (cookies.length === 0) {
+                showToast('Nenhum cookie válido encontrado!', 'error');
+                return;
+            }
+
+            // Extrair nick e senha de cada cookie
+            const nicksSenhas = [];
+            cookies.forEach(cookie => {
+                // Extrai o nick (antes do primeiro ":")
+                const nickMatch = cookie.match(/^([^:]+):/);
+                if (!nickMatch) return;
+
+                const nick = nickMatch[1];
+                
+                // Extrai a senha (entre o primeiro ":" e ":_|")
+                const senhaMatch = cookie.match(/^[^:]+:([^:]+?):_\|/);
+                if (!senhaMatch) {
+                    // Se não encontrar ":_|", tenta pegar tudo entre o primeiro ":" e o próximo ":"
+                    const fallbackMatch = cookie.match(/^[^:]+:([^:]+?):/);
+                    if (fallbackMatch) {
+                        nicksSenhas.push(`${nick}:${fallbackMatch[1]}`);
+                    }
+                    return;
+                }
+
+                const senha = senhaMatch[1];
+                nicksSenhas.push(`${nick}:${senha}`);
+            });
+
+            if (nicksSenhas.length === 0) {
+                showToast('Não foi possível extrair nicks e senhas dos cookies!', 'error');
+                return;
+            }
+
+            // Atualizar estatísticas
+            document.getElementById('totalCookies').textContent = nicksSenhas.length;
+            document.getElementById('totalLotes').textContent = '1';
+            document.getElementById('stats').style.display = 'block';
+
+            // Exibir resultados
+            exibirNicksSenhas(nicksSenhas);
+            showToast(`${nicksSenhas.length} nicks e senhas extraídos com sucesso!`, 'success');
+        }
+
+        function exibirNicksSenhas(nicksSenhas) {
+            const container = document.getElementById('lotesContainer');
+            container.innerHTML = '';
+
+            const resultadoDiv = document.createElement('div');
+            resultadoDiv.className = 'lote';
+
+            const header = document.createElement('div');
+            header.className = 'lote-header';
+            header.innerHTML = `
+                <div class="lote-header-left">
+                    <span>Nicks e Senhas</span>
+                    <span>(${nicksSenhas.length} contas)</span>
+                    <button class="copy-lote-btn" onclick="copiarNicksSenhas()">📋 Copiar Tudo</button>
+                </div>
+            `;
+
+            const content = document.createElement('div');
+            content.className = 'lote-content';
+            content.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
+
+            nicksSenhas.forEach((item) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cookie-item';
+                itemDiv.textContent = item;
+                itemDiv.title = item;
+                content.appendChild(itemDiv);
+            });
+
+            resultadoDiv.appendChild(header);
+            resultadoDiv.appendChild(content);
+            container.appendChild(resultadoDiv);
+
+            // Armazenar globalmente para poder copiar
+            window.nicksSenhasData = nicksSenhas;
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function copiarNicksSenhas() {
+            if (!window.nicksSenhasData) {
+                showToast('Erro ao copiar!', 'error');
+                return;
+            }
+
+            const texto = window.nicksSenhasData.join('\n');
+
+            navigator.clipboard.writeText(texto).then(() => {
+                showToast('Nicks e senhas copiados para a área de transferência!', 'success');
+            }).catch(err => {
+                console.error('Erro ao copiar:', err);
+                const textarea = document.createElement('textarea');
+                textarea.value = texto;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('Nicks e senhas copiados para a área de transferência!', 'success');
+            });
+        }
+
+        function exibirLotes(lotes) {
+            const container = document.getElementById('lotesContainer');
+            container.innerHTML = '';
+
+            lotes.forEach((lote, index) => {
+                const loteDiv = document.createElement('div');
+                loteDiv.className = 'lote';
+
+                const header = document.createElement('div');
+                header.className = 'lote-header';
+                header.innerHTML = `
+                    <div class="lote-header-left">
+                        <span>Lote ${index + 1}</span>
+                        <span>(${lote.length} cookies)</span>
+                        <button class="copy-lote-btn" onclick="copiarLote(${index})">📋 Copiar Lote</button>
+                    </div>
+                `;
+
+                const content = document.createElement('div');
+                content.className = 'lote-content';
+
+                lote.forEach((cookie) => {
+                    const cookieDiv = document.createElement('div');
+                    cookieDiv.className = 'cookie-item';
+                    cookieDiv.textContent = extrairNick(cookie);
+                    cookieDiv.title = cookie; // Mostra o cookie completo no hover
+                    content.appendChild(cookieDiv);
+                });
+
+                loteDiv.appendChild(header);
+                loteDiv.appendChild(content);
+                container.appendChild(loteDiv);
+            });
+
+            // Armazenar lotes globalmente para poder copiar
+            window.lotesData = lotes;
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function copiarLote(indexLote) {
+            if (!window.lotesData || !window.lotesData[indexLote]) {
+                showToast('Erro ao copiar lote!', 'error');
+                return;
+            }
+
+            const lote = window.lotesData[indexLote];
+            const textoLote = lote.join('\n');
+
+            navigator.clipboard.writeText(textoLote).then(() => {
+                showToast(`Lote ${indexLote + 1} copiado para a área de transferência!`, 'success');
+            }).catch(err => {
+                console.error('Erro ao copiar:', err);
+                // Fallback para navegadores mais antigos
+                const textarea = document.createElement('textarea');
+                textarea.value = textoLote;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast(`Lote ${indexLote + 1} copiado para a área de transferência!`, 'success');
+            });
+        }
+
+        function limparTudo() {
+            document.getElementById('cookieInput').value = '';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('stats').style.display = 'none';
+            document.getElementById('lotesContainer').innerHTML = '';
+            window.lotesData = null;
+            window.nicksSenhasData = null;
+        }
+
+        // Permitir processamento com Enter (Ctrl+Enter)
+        document.getElementById('cookieInput').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                processarCookies();
+            }
+        });
+    </script>
+</body>
+</html>

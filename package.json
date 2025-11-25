@@ -1,0 +1,19 @@
+{
+  "name": "cookie-splitter",
+  "version": "1.0.0",
+  "description": "Cookie Splitter - Separador de Cookies Roblox",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["cookie", "splitter", "roblox"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+
